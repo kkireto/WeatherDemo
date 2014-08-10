@@ -21,11 +21,14 @@
 
 #import "AirportDetailsViewController.h"
 
+#import "LoadingView.h"
+
 #define item_width 150
 #define item_height 180
 
 @interface ViewController ()
 
+@property (nonatomic,strong) LoadingView *loadingView;
 @property (nonatomic,strong) UIRefreshControl *refreshControl;
 @property (nonatomic,strong) NSMutableArray *airportsArray;
 @property (nonatomic,strong) NSDate *lastRefreshTime;
@@ -116,6 +119,8 @@
     NSLog(@"latitude:%f and longitude:%f", location.coordinate.longitude, location.coordinate.latitude);
     
     if (location) {
+        [self addLoadingMask];
+        [_loadingView updateLabelText:@"Loading airports..."];
         [CommunicationManager nearbyAirportsForLongitude:location.coordinate.longitude
                                              andLatitude:location.coordinate.latitude
                                          successCallback:^(id responseObject) {
@@ -145,9 +150,13 @@
                                                  [_collectionView reloadData];
                                                  [self reloadWeatherForAirports];
                                              }
+                                             else {
+                                                 [self removeLoadingMask];
+                                             }
                                              
                                          } errorCallback:^(NSString *errorMessage) {
                                              
+                                             [self removeLoadingMask];
                                              UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:nil message:errorMessage delegate:nil cancelButtonTitle:@"Dismiss" otherButtonTitles:nil];
                                              [alertView show];
                                          }];
@@ -175,6 +184,7 @@
         [self loadWeatherForAirports];
     }
     else {
+        [self removeLoadingMask];
         [_refreshControl endRefreshing];
     }
 }
@@ -188,14 +198,16 @@
         _enableRefresh = YES;
         _lastRefreshTime = [NSDate date];
         [_refreshControl endRefreshing];
+        [self removeLoadingMask];
     }
 }
 
 - (void)loadWeatherForAirportWithIndex:(NSUInteger)airportIndex {
     
     if ([_airportsArray count] > airportIndex) {
-        
+        [self addLoadingMask];
         AirportModel *airport = [_airportsArray objectAtIndex:airportIndex];
+        [_loadingView updateLabelText:[NSString stringWithFormat:@"Loading %@...", airport.code]];
         [CommunicationManager currentWeatherForCityName:airport.city
                                         successCallback:^(id responseObject) {
                                             
@@ -213,6 +225,23 @@
                                             _airportIndex++;
                                             [self loadWeatherForAirports];
                                         }];
+    }
+}
+
+#pragma mark - loading mask
+- (void)addLoadingMask {
+    
+    if (!_loadingView) {
+        _loadingView = [[LoadingView alloc] initWithFrame:CGRectMake((self.view.frame.size.width - 90.0)/2, (self.view.frame.size.height - 90.0)/2, 90.0, 90.0)];
+        [self.view addSubview:_loadingView];
+    }
+}
+
+- (void)removeLoadingMask {
+    
+    if (_loadingView) {
+        [_loadingView removeFromSuperview];
+        _loadingView = nil;
     }
 }
 

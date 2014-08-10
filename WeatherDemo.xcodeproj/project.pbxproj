@@ -100,6 +100,7 @@
 		60F11F641996C04E00129A6B /* Icon-Small@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 60F11F561996C04E00129A6B /* Icon-Small@2x.png */; };
 		60F11F651996C04E00129A6B /* Icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 60F11F571996C04E00129A6B /* Icon.png */; };
 		60F11F661996C04E00129A6B /* Icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 60F11F581996C04E00129A6B /* Icon@2x.png */; };
+		60F11F69199775D000129A6B /* LoadingView.m in Sources */ = {isa = PBXBuildFile; fileRef = 60F11F68199775D000129A6B /* LoadingView.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -236,6 +237,8 @@
 		60F11F561996C04E00129A6B /* Icon-Small@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-Small@2x.png"; sourceTree = "<group>"; };
 		60F11F571996C04E00129A6B /* Icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Icon.png; sourceTree = "<group>"; };
 		60F11F581996C04E00129A6B /* Icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon@2x.png"; sourceTree = "<group>"; };
+		60F11F67199775D000129A6B /* LoadingView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoadingView.h; sourceTree = "<group>"; };
+		60F11F68199775D000129A6B /* LoadingView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LoadingView.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -503,6 +506,8 @@
 				60F11F431996ADD600129A6B /* WeatherNowItemView.m */,
 				60F11F451996ADE700129A6B /* WeatherForecastItemView.h */,
 				60F11F461996ADE700129A6B /* WeatherForecastItemView.m */,
+				60F11F67199775D000129A6B /* LoadingView.h */,
+				60F11F68199775D000129A6B /* LoadingView.m */,
 			);
 			path = CustomViews;
 			sourceTree = "<group>";
@@ -688,6 +693,7 @@
 				60F11EB81996321300129A6B /* UIImageView+AFNetworking.m in Sources */,
 				60F11EB01996321300129A6B /* AFJSONRequestOperation.m in Sources */,
 				60F11EB11996321300129A6B /* AFNetworkActivityIndicatorManager.m in Sources */,
+				60F11F69199775D000129A6B /* LoadingView.m in Sources */,
 				60F11F471996ADE700129A6B /* WeatherForecastItemView.m in Sources */,
 				60F11F3A1996A84000129A6B /* AirportWeatherNowCollectionViewCell.m in Sources */,
 				60F11ECF1996737700129A6B /* WeatherModel.m in Sources */,
@@ -900,6 +906,7 @@
 				60F11E9019962F8900129A6B /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		60F11E9119962F8900129A6B /* Build configuration list for PBXNativeTarget "WeatherDemoTests" */ = {
 			isa = XCConfigurationList;
@@ -908,6 +915,7 @@
 				60F11E9319962F8900129A6B /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

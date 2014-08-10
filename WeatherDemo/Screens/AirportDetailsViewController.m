@@ -22,9 +22,12 @@
 #import "WeatherNowItemView.h"
 #import "WeatherForecastItemView.h"
 
+#import "LoadingView.h"
+
 @interface AirportDetailsViewController ()
 
 @property (nonatomic,strong) AirportModel* airport;
+@property (nonatomic,strong) LoadingView *loadingView;
 @property (nonatomic,strong) UIRefreshControl *refreshControl;
 @property (nonatomic,strong) NSMutableArray *dataArray;
 @property (nonatomic,assign) BOOL enableRefresh;
@@ -168,6 +171,8 @@
         }
         _enableRefresh = NO;
         
+        [self addLoadingMask];
+        [_loadingView updateLabelText:[NSString stringWithFormat:@"Loading %@...", _airport.code]];
         [CommunicationManager forecastWeatherForCityName:_airport.city
                                          successCallback:^(id responseObject) {
                                              
@@ -182,25 +187,51 @@
                                                      if (!_airport.forecastArray) {
                                                          _airport.forecastArray = [[NSMutableArray alloc] init];
                                                      }
-                                                     for (int forecastIndex = 0; forecastIndex < MAX_FORECAST_VALUE; forecastIndex++) {
+                                                     int addedCount = 0;
+                                                     for (int forecastIndex = 0; forecastIndex < [responseArray count]; forecastIndex++) {
                                                          
                                                          NSDictionary *dict = [responseArray objectAtIndex:forecastIndex];
                                                          WeatherModel *weather = [[WeatherModel alloc] initWithDict:dict];
-                                                         [_airport.forecastArray addObject:weather];
+                                                         if ([weather.date compare:[NSDate date]] == NSOrderedDescending) {
+                                                             [_airport.forecastArray addObject:weather];
+                                                             addedCount++;
+                                                         }
+                                                         if (addedCount == MAX_FORECAST_VALUE) {
+                                                             break;
+                                                         }
                                                      }
                                                      [self setCollectionData];
                                                  }
                                              }
+                                             [self removeLoadingMask];
                                              _enableRefresh = YES;
                                              
                                          } errorCallback:^(NSString *errorMessage) {
                                              
-                                             
+                                             [self removeLoadingMask];
                                          }];
     }
     else {
         [self setCollectionData];
+        [self removeLoadingMask];
         [_refreshControl endRefreshing];
+    }
+}
+
+#pragma mark - loading mask
+- (void)addLoadingMask {
+    
+    if (!_loadingView) {
+        _loadingView = [[LoadingView alloc] initWithFrame:CGRectMake((self.view.frame.size.width - 90.0)/2, (self.view.frame.size.height - 90.0)/2, 90.0, 90.0)];
+        [self.view addSubview:_loadingView];
+    }
+}
+
+- (void)removeLoadingMask {
+    
+    if (_loadingView) {
+        [_loadingView removeFromSuperview];
+        _loadingView = nil;
     }
 }
 
