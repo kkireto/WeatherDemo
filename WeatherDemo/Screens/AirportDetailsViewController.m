@@ -200,14 +200,17 @@
                                                              break;
                                                          }
                                                      }
+                                                     _airport.forecastLoadDate = [NSDate date];
                                                      [self setCollectionData];
                                                  }
                                              }
+                                             [_refreshControl endRefreshing];
                                              [self removeLoadingMask];
                                              _enableRefresh = YES;
                                              
                                          } errorCallback:^(NSString *errorMessage) {
                                              
+                                             [_refreshControl endRefreshing];
                                              [self removeLoadingMask];
                                          }];
     }
